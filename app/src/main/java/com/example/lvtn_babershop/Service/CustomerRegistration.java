@@ -4,12 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,8 +15,6 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 import com.example.lvtn_babershop.R;
-import com.firebase.ui.auth.data.model.PhoneNumber;
-import com.google.android.datatransport.runtime.dagger.Reusable;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
@@ -27,18 +22,20 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.hbb20.CountryCodePicker;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class StaffRegistration extends AppCompatActivity {
+public class CustomerRegistration extends AppCompatActivity {
+
     String[] HCM = {"Quan1", "Quan5", "Quan7"};
     String[] HANOI = {"Dong Da", "Ba Dinh", "Hoàn Kiếm"};
 
-    TextInputLayout Fname, Lname, Email, Pass, cfpass, mobileno, houseno, area, postcode;
+
+    TextInputLayout Fname, Lname, Email, Pass, cfpass, mobileno, houseno, area;
     Spinner cityspin, districspin;
     Button signup, Emaill, Phone;
     CountryCodePicker Cpp;
@@ -54,31 +51,31 @@ public class StaffRegistration extends AppCompatActivity {
     String house;
     String Area;
     String Postcode;
-    String role = "Staff";
+    String role = "Customer";
     String city;
     String district;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_staff_registration);
+        setContentView(R.layout.activity_customer_registration);
 
-        Fname = (TextInputLayout) findViewById(R.id.Firstname);
-        Lname = (TextInputLayout) findViewById(R.id.Lastname);
-        Email = (TextInputLayout) findViewById(R.id.Email);
-        Pass = (TextInputLayout) findViewById(R.id.Pwd);
-        cfpass = (TextInputLayout) findViewById(R.id.Cpass);
-        mobileno = (TextInputLayout) findViewById(R.id.Mobileno);
+        Fname = (TextInputLayout) findViewById(R.id.edtFirstname);
+        Lname = (TextInputLayout) findViewById(R.id.edtLastname);
+        Email = (TextInputLayout) findViewById(R.id.edtEmail);
+        Pass = (TextInputLayout) findViewById(R.id.edtPassword);
+        cfpass = (TextInputLayout) findViewById(R.id.edtCPassword);
+        mobileno = (TextInputLayout) findViewById(R.id.edtPhonenum);
         houseno = (TextInputLayout) findViewById(R.id.houseNo);
         area = (TextInputLayout) findViewById(R.id.Area);
-        postcode = (TextInputLayout) findViewById(R.id.Postcode);
+
 
         cityspin = (Spinner) findViewById(R.id.Statee);
         districspin = (Spinner) findViewById(R.id.Citys);
 
-        signup = (Button) findViewById(R.id.Signup);
-        Emaill = (Button) findViewById(R.id.emaill);
-        Phone = (Button) findViewById(R.id.phone);
+        signup = (Button) findViewById(R.id.btnSignUp);
+        Emaill = (Button) findViewById(R.id.btnEmail);
+        Phone = (Button) findViewById(R.id.btnPhone);
         Cpp = (CountryCodePicker) findViewById(R.id.CountryCode);
 
         cityspin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -91,7 +88,7 @@ public class StaffRegistration extends AppCompatActivity {
                     for (String text : HCM) {
                         list.add(text);
                     }
-                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(StaffRegistration.this, android.R.layout.simple_spinner_item, list);
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(CustomerRegistration.this, android.R.layout.simple_spinner_item, list);
 
                     districspin.setAdapter(arrayAdapter);
                 }
@@ -100,7 +97,7 @@ public class StaffRegistration extends AppCompatActivity {
                     for (String text : HANOI) {
                         list.add(text);
                     }
-                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(StaffRegistration.this, android.R.layout.simple_spinner_item, list);
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(CustomerRegistration.this, android.R.layout.simple_spinner_item, list);
 
                     districspin.setAdapter(arrayAdapter);
                 }
@@ -112,7 +109,7 @@ public class StaffRegistration extends AppCompatActivity {
         });
 
 
-        databaseReference = firebaseDatabase.getInstance().getReference("Staff");
+        databaseReference = firebaseDatabase.getInstance().getReference("Customer");
         FAuth = FirebaseAuth.getInstance();
 
 
@@ -128,12 +125,11 @@ public class StaffRegistration extends AppCompatActivity {
                 confirmpassword = cfpass.getEditText().getText().toString().trim();
                 Area = area.getEditText().getText().toString().trim();
                 house = houseno.getEditText().getText().toString().trim();
-                Postcode = postcode.getEditText().getText().toString().trim();
 
 
                 if (isValid()) {
 
-                    final ProgressDialog mDialog = new ProgressDialog(StaffRegistration.this);
+                    final ProgressDialog mDialog = new ProgressDialog(CustomerRegistration.this);
                     mDialog.setCancelable(false);
                     mDialog.setCanceledOnTouchOutside(false);
                     mDialog.setMessage("Registering please wait...");
@@ -143,12 +139,11 @@ public class StaffRegistration extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                String useridd = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                                databaseReference = FirebaseDatabase.getInstance().getReference("User").child(useridd);
+                                String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                databaseReference = FirebaseDatabase.getInstance().getReference("User").child(userid);
                                 final HashMap<String,String> hashMap = new HashMap<>();
-                                hashMap.put("Role", role);
+                                hashMap.put("Role", role); //Role là vai trò (Customer hoặc Staff)
                                 databaseReference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         HashMap<String, String> hashMappp = new HashMap<>();
@@ -162,12 +157,9 @@ public class StaffRegistration extends AppCompatActivity {
                                         hashMappp.put("Distric", district);
                                         hashMappp.put("Password", password);
                                         hashMappp.put("ConfirmPassword", confirmpassword);
-                                        hashMappp.put("Postcode", Postcode);
-
-                                        firebaseDatabase.getInstance().getReference("Staff")
+                                        firebaseDatabase.getInstance().getReference("Customer")
                                                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                                 .setValue(hashMappp).addOnCompleteListener(new OnCompleteListener<Void>() {
-
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 mDialog.dismiss();
@@ -176,7 +168,7 @@ public class StaffRegistration extends AppCompatActivity {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
                                                         if (task.isSuccessful()) {
-                                                            androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(StaffRegistration.this);
+                                                            androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(CustomerRegistration.this);
                                                             builder.setMessage("Registered Successfully,Please Verify your Email");
                                                             builder.setCancelable(false);
                                                             builder.setPositiveButton("OK", (dialog, which) -> {
@@ -184,7 +176,7 @@ public class StaffRegistration extends AppCompatActivity {
                                                                 dialog.dismiss();
 
                                                                 String phonenumber = Cpp.getSelectedCountryCodeWithPlus() + mobile;
-                                                                Intent b = new Intent(StaffRegistration.this, StaffVerifyPhone.class);
+                                                                Intent b = new Intent(CustomerRegistration.this, StaffVerifyPhone.class);
                                                                 b.putExtra("phonenumber", phonenumber);
                                                                 startActivity(b);
 
@@ -194,7 +186,7 @@ public class StaffRegistration extends AppCompatActivity {
 
                                                         } else {
                                                             mDialog.dismiss();
-                                                            ReusableCodeForAll.ShowAlert(StaffRegistration.this, "Error", task.getException().getMessage());
+                                                            ReusableCodeForAll.ShowAlert(CustomerRegistration.this, "Error", task.getException().getMessage());
 
                                                         }
                                                     }
@@ -207,19 +199,18 @@ public class StaffRegistration extends AppCompatActivity {
 
                             } else {
                                 mDialog.dismiss();
-                                ReusableCodeForAll.ShowAlert(StaffRegistration.this, "Error", task.getException().getMessage());
+                                ReusableCodeForAll.ShowAlert(CustomerRegistration.this, "Error", task.getException().getMessage());
                             }
                         }
                     });
                 }
             }
         });
-
         Emaill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Intent i = new Intent(StaffRegistration.this, StaffLogin.class);
+                Intent i = new Intent(CustomerRegistration.this, StaffLogin.class);
                 startActivity(i);
                 finish();
             }
@@ -229,7 +220,7 @@ public class StaffRegistration extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent e = new Intent(StaffRegistration.this, StaffPhone.class);
+                Intent e = new Intent(CustomerRegistration.this, StaffPhone.class);
                 startActivity(e);
                 finish();
             }
@@ -237,7 +228,7 @@ public class StaffRegistration extends AppCompatActivity {
         Email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(StaffRegistration.this, StaffPhone.class));
+                startActivity(new Intent(CustomerRegistration.this, StaffPhone.class));
                 finish();
             }
         });
@@ -261,10 +252,8 @@ public class StaffRegistration extends AppCompatActivity {
         area.setError("");
         houseno.setErrorEnabled(false);
         houseno.setError("");
-        postcode.setErrorEnabled(false);
-        postcode.setError("");
 
-        boolean isValidname = false, isValidemail = false, isvalidpassword = false, isvalidconfirmpassword = false, isvalid = false, isvalidmobileno = false, isvalidlname = false, isvalidhousestreetno = false, isvalidarea = false, isvalidpostcode = false;
+        boolean isValidname = false, isValidemail = false, isvalidpassword = false, isvalidconfirmpassword = false, isvalid = false, isvalidmobileno = false, isvalidlname = false, isvalidhousestreetno = false, isvalidarea = false;
         if (TextUtils.isEmpty(fname)) {
             Fname.setErrorEnabled(true);
             Fname.setError("Firstname is required");
@@ -334,14 +323,7 @@ public class StaffRegistration extends AppCompatActivity {
         } else {
             isvalidarea = true;
         }
-        if (TextUtils.isEmpty(Postcode)) {
-            postcode.setErrorEnabled(true);
-            postcode.setError("Field cannot be empty");
-        } else {
-            isvalidpostcode = true;
-        }
-
-        isvalid = (isValidname && isvalidpostcode && isvalidlname && isValidemail && isvalidconfirmpassword && isvalidpassword && isvalidmobileno && isvalidarea && isvalidhousestreetno) ? true : false;
+        isvalid = (isValidname  && isvalidlname && isValidemail && isvalidconfirmpassword && isvalidpassword && isvalidmobileno && isvalidarea && isvalidhousestreetno) ? true : false;
         return isvalid;
     }
 }

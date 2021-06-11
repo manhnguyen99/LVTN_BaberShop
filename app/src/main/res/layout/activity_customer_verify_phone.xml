@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/baber_bg1"
-    tools:context=".Service.StaffVerifyPhone">
-
+    tools:context=".Service.CustomerVerifyPhone">
     <LinearLayout
         android:orientation="vertical"
         android:id="@+id/linearlayout"
@@ -61,4 +60,5 @@
             android:layout_marginTop="15dp"
             android:textAlignment="center"/>
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,179 +1,112 @@
-package com.example.lvtn_babershop;
+package com.example.lvtn_babershop.Service;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.Manifest;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.PersistableBundle;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.CallbackManager;
-import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.IdpResponse;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
+import com.example.lvtn_babershop.R;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.MultiplePermissionsReport;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
-
-import org.jetbrains.annotations.NotNull;
-import org.json.JSONObject;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import Common.Common;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int APP_REQUEST_CODE = 7117;
+    FirebaseAuth Fauth;
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
 
-    private List<AuthUI.IdpConfig> providers;
-    private FirebaseAuth.AuthStateListener authStateListener;
-    private FirebaseAuth mAuth;
-
-    @BindView(R.id.btn_login)
-    Button btn_login;
-    @BindView(R.id.txt_skip)
-    TextView txt_skip;
-    @OnClick(R.id.btn_login)
-    void loginUser(){
-        startActivityForResult(AuthUI.getInstance()
-                .createSignInIntentBuilder()
-                .setAvailableProviders(providers).build(),APP_REQUEST_CODE);
-    }
-    @OnClick(R.id.txt_skip)
-    void skipLoginJustGoHome(){
-        Intent intent = new Intent(this, HomeActivity.class);
-        intent.putExtra(Common.IS_LOGIN, false);
-        startActivity(intent);
-    }
-
+    ImageView imageVieww;
+    TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
-        providers = Collections.singletonList(new AuthUI.IdpConfig.PhoneBuilder().build());
-
-        mAuth = FirebaseAuth.getInstance();
-        authStateListener = firebaseAuth -> {
-            FirebaseUser user = firebaseAuth.getCurrentUser();
-            if(user!=null){
-                checkUserFromFirebase(user);
-            }
-        };
-        Dexter.withActivity(this)
-                .withPermission(String.valueOf(new String[]{
-                        Manifest.permission.READ_CALENDAR,
-                        Manifest.permission.WRITE_CALENDAR
-                })).withListener(new MultiplePermissionsListener(){
+        imageVieww=(ImageView)findViewById(R.id.imageView);
+        textView=(TextView)findViewById(R.id.textView);
+        imageVieww.animate().alpha(0f).setDuration(0);
+        textView.animate().alpha(0f).setDuration(0);
+        imageVieww.animate().alpha(1f).setDuration(1000).setListener(new AnimatorListenerAdapter() {
             @Override
-            public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
-                FirebaseUser user = mAuth.getCurrentUser();
-                if(user != null){
+            public void onAnimationEnd(Animator animation) {
+                textView.animate().alpha(1f).setDuration(800);
+            }
+        });
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
 
-                    FirebaseMessaging.getInstance()
-                            .getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-                        @Override
-                        public void onComplete(@NonNull @NotNull Task<String> task) {
-                            if(task.isSuccessful()){
-                                
-                                Common.updateToken(getBaseContext(),task.getResult();
-                                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                                intent.putExtra(Common.IS_LOGIN, true);
+                Fauth = FirebaseAuth.getInstance();
+                if (Fauth.getCurrentUser() != null) {
+                    if (Fauth.getCurrentUser().isEmailVerified()) {
+                        Fauth = FirebaseAuth.getInstance();
+                        databaseReference = FirebaseDatabase.getInstance().getReference("User").child(FirebaseAuth.getInstance().getUid() + "/Role");
+                        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                String role = dataSnapshot.getValue(String.class);
+                                if (role.equals("Staff")) {
+                                    Intent n = new Intent(MainActivity.this, HomeActivity.class);
+                                    startActivity(n);
+                                    finish();
+                                }
+                                if (role.equals("Customer")) {
+                                    Intent a = new Intent(MainActivity.this, HomeActivity.class);
+                                    startActivity(a);
+                                    finish();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                Toast.makeText(MainActivity.this, databaseError.getMessage(), Toast.LENGTH_LONG).show();
+
+                            }
+                        });
+                    } else {
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                        builder.setMessage("Check whether you have verified your details, Otherwise please verify");
+                        builder.setCancelable(false);
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                dialog.dismiss();
+                                Intent intent = new Intent(MainActivity.this, MainMenu.class);
                                 startActivity(intent);
                                 finish();
                             }
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull @NotNull Exception e) {
-                            Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG);
-                            Intent intent  = new Intent(MainActivity.this, HomeActivity.class);
-                            intent.putExtra(Common.IS_LOGIN, true);
-                            startActivity(intent);
-                            finish();
-                        }
-                    });
-                }else {
-                    setContentView(R.layout.activity_main);
-                    ButterKnife.bind(MainActivity.this);
+                        });
+                        AlertDialog alert = builder.create();
+                        alert.show();
+                        Fauth.signOut();
+                    }
+                } else {
+                    Intent intent = new Intent(MainActivity.this, MainMenu.class);
+                    startActivity(intent);
+                    finish();
                 }
             }
-
-            @Override
-            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken permissionToken) {
-
-            }
-        }).check();
+        }, 3000);
     }
-
-    private void checkUserFromFirebase(FirebaseUser user) {
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Common.updateToken(getBaseContext(), task.getResult().getToken());
-                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                intent.putExtra(Common.IS_LOGIN, true);
-                startActivity(intent);
-                finish();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull @NotNull Exception e) {
-
-                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                intent.putExtra(Common.IS_LOGIN, true);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-    }
-    @Override
-    protected void onStart() {
-
-        super.onStart();
-        mAuth.addAuthStateListener(authStateListener);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-    }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == APP_REQUEST_CODE)
-        {
-            IdpResponse response = IdpResponse.fromResultIntent(data);
-            if(resultCode == RESULT_OK)
-            {
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            }
-            else
-            {
-                Toast.makeText(this, "Fail to Sign In", Toast.LENGTH_SHORT).show();
-            }
-        }
-
-
-    }
-
 }

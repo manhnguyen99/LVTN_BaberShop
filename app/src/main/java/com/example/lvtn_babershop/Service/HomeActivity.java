@@ -1,7 +1,9 @@
-package com.example.lvtn_babershop;
+package com.example.lvtn_babershop.Service;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
@@ -13,8 +15,7 @@ import android.widget.Toast;
 import com.example.lvtn_babershop.Fragment.HomeFragment;
 import com.example.lvtn_babershop.Fragment.ShopingFragment;
 import com.example.lvtn_babershop.Model.User;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.example.lvtn_babershop.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputEditText;
@@ -27,95 +28,32 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.jetbrains.annotations.NotNull;
 
-import Common.Common;
+import com.example.lvtn_babershop.Common.Common;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class HomeActivity extends AppCompatActivity {
-    @BindView(R.id.bottom_navigation)
-    BottomNavigationView bottomNavigationView;
-
-    BottomSheetDialog bottomSheetDialog;
-
-    CollectionReference userRef;
+    private DrawerLayout mDrawerlayout;
+    private ActionBarDrawerToggle mToggle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        ButterKnife.bind(HomeActivity.this);
+        mDrawerlayout = findViewById(R.id.drawerlayout);
+        mToggle = new ActionBarDrawerToggle(this, mDrawerlayout, R.string.open, R.string.close);
 
-        //init
-        userRef = FirebaseFirestore.getInstance().collection("User");
-        if(getIntent() != null){
-            boolean isLogin = getIntent().getBooleanExtra(Common.IS_LOGIN, false);
-            if(isLogin){
+        mDrawerlayout.addDrawerListener(mToggle);
+        mToggle.syncState();
 
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-               //luu thong tin nguoi dung
-                DocumentReference curentUser = userRef.document(user.getPhoneNumber());
-                curentUser.get()
-                        .addOnCompleteListener(task -> {
-                            if(task.isSuccessful()){
-                                DocumentSnapshot userSnapShot = task.getResult();
-                                if(!userSnapShot.exists()){
-                                    showUpdateDialog(user.getPhoneNumber());
-                                }
-                            }
-                        });
-            }
-        }
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            Fragment fragment = null;
-            @Override
-            public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
-               if(item.getItemId() == R.id.action_home)
-                   fragment = new HomeFragment();
-               else if(item.getItemId() ==  R.id.action_shoping)
-                   fragment = new ShopingFragment();
-                return loadFragment(fragment);
-            }
-        });
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-
-
-    private void showUpdateDialog(String phoneNumber) {
-        bottomSheetDialog = new BottomSheetDialog(this);
-        bottomSheetDialog.setCanceledOnTouchOutside(false);
-        bottomSheetDialog.setCancelable(false);
-         View sheetView = getLayoutInflater().inflate(R.layout.layout_update_imfomation, null);
-
-        Button btn_update = sheetView.findViewById(R.id.btn_update);
-        TextInputEditText edt_name = sheetView.findViewById(R.id.edt_name);
-        TextInputEditText edt_address = sheetView.findViewById(R.id.edt_address);
-
-        btn_update.setOnClickListener(v -> {
-            User user = new User(edt_name.getText().toString(),
-                    edt_address.getText().toString(),
-                    phoneNumber);
-            userRef.document(phoneNumber)
-                    .set(user)
-                    .addOnSuccessListener(unused -> {
-                        bottomSheetDialog.dismiss();
-                        Toast.makeText(HomeActivity.this, "Thank you", Toast.LENGTH_SHORT).show();
-                        })
-                    .addOnFailureListener(e ->{
-                        bottomSheetDialog.dismiss();
-                        Toast.makeText(HomeActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
-                            });
-        });
-        bottomSheetDialog.setContentView(sheetView);
-        bottomSheetDialog.show();
-    }
-
-    private boolean loadFragment(Fragment fragment) {
-        if(fragment!= null){
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,fragment)
-                    .commit();
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(mToggle.onOptionsItemSelected(item)){
             return true;
         }
-        return false;
+        return super.onOptionsItemSelected(item);
     }
-
 }
