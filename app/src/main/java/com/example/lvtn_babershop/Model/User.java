@@ -1,17 +1,17 @@
 package com.example.lvtn_babershop.Model;
 
 public class User {
-    private String name, address, phoneNumber;
+    private String name, email, phoneNumber;
 
-    public User(){
-     }
+    public User() {
+    }
 
-     public User(String name, String address, String phoneNumber){
+    public User(String name, String email, String phoneNumber) {
         this.name = name;
-        this.address = address;
+        this.email = email;
         this.phoneNumber = phoneNumber;
     }
-    private String getName(){
+    public String getName() {
         return name;
     }
 
@@ -19,12 +19,12 @@ public class User {
         this.name = name;
     }
 
-    public String getAddress() {
-        return address;
+    public String getEmail() {
+        return email;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPhoneNumber() {
