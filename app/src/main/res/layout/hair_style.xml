@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="5dp"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.cardview.widget.CardView
+        app:cardCornerRadius="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <androidx.cardview.widget.CardView
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/imgHair"
+                    android:src="@drawable/tocnam"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:scaleType="centerCrop"
+                    />
+            </androidx.cardview.widget.CardView>
+            <LinearLayout
+                android:padding="15dp"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/txtNameHair"
+                    android:ellipsize="end"
+                    android:textColor="#000"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:text="Under Cut"
+                    android:textSize="17sp"
+                    android:textAlignment="center"
+                    />
+                <TextView
+                    android:id="@+id/txtInfoHair"
+                    android:ellipsize="end"
+                    android:textSize="14sp"
+                    android:maxLines="2"
+                    android:textColor="#000"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:text="Kế bên kiểu tóc nam không rườm rà, đẹp nhưng đơn điệu, thì còn có không ít những chọn lọc tóc ngắn nam đẹp mang nhiều phong cách đậm chất style, như mẫu tóc nam ngắn xu hướng hàn quốc tạo kiểu, undercut ngắn."/>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

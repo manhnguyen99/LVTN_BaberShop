@@ -38,10 +38,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
                         <ImageView
-                            android:id="@+id/ingBooking"
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
-                            android:src="@drawable/calendar_icon"
+                            android:id="@+id/imgBooking"
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"
+                            android:src="@drawable/ic_baseline_calendar_today_24"
                             />
                         <TextView
                             android:layout_width="wrap_content"
@@ -59,9 +59,9 @@
                         >
                         <ImageView
                             android:id="@+id/imgShopping"
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
-                            android:src="@drawable/shopping_cart"
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"
+                            android:src="@drawable/ic_baseline_shopping_cart_24"
                             />
                         <TextView
                             android:layout_width="wrap_content"
@@ -69,7 +69,6 @@
                             android:text="Cart"
                             android:textSize="18sp"
                             android:layout_gravity="center"
-                            android:layout_marginLeft="10dp"
                             android:textStyle="bold"/>
                     </LinearLayout>
                     <LinearLayout
@@ -80,9 +79,9 @@
                         >
                         <ImageView
                             android:id="@+id/imgHistory"
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
-                            android:src="@drawable/history"
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"
+                            android:src="@drawable/ic_baseline_history_24"
                             />
                         <TextView
                             android:layout_width="wrap_content"
@@ -100,9 +99,9 @@
                         >
                         <ImageView
                             android:id="@+id/imgNofication"
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
-                            android:src="@drawable/nofication_icon"
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"
+                            android:src="@drawable/ic_baseline_notification_important_24"
                             />
                         <TextView
                             android:layout_width="wrap_content"
@@ -123,7 +122,7 @@
                         android:layout_height="wrap_content">
                         <TextView
                             android:textColor="#000"
-                            android:textStyle="bold"
+                            android:textSize="20sp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Ưu đãi đặc biệt"/>
@@ -139,6 +138,29 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
+                    </androidx.recyclerview.widget.RecyclerView>
+                    <RelativeLayout
+                        android:padding="15dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:textColor="#000"
+                            android:textSize="20sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Những kiểu tóc được ưa chuộng"/>
+                        <ImageView
+
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"/>
+                    </RelativeLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/recycleViewHairStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
                     </androidx.recyclerview.widget.RecyclerView>
 
                 </LinearLayout>

@@ -6,15 +6,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.lvtn_babershop.Model.HairStyle;
+import com.example.lvtn_babershop.Model.HairStyleAdapter;
 import com.example.lvtn_babershop.Model.ProductAdapter;
 import com.example.lvtn_babershop.Model.User;
 import com.example.lvtn_babershop.Model.product;
@@ -29,10 +36,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -42,12 +51,18 @@ public class HomeActivity extends AppCompatActivity {
 
     ArrayList<product> arrProduct;
     ProductAdapter adapter;
-    RecyclerView recyclerView;
+
+    ArrayList<HairStyle> arrHairStyle;
+    HairStyleAdapter adapterHairStyle;
+
+    RecyclerView recyclerView, recyclerViewHairStyle;
 
     FirebaseUser firebaseUser;
     DatabaseReference reference;
 
     TextView txtNameCustomer, txtEmail, txtPhoneNumber;
+    ImageView imgBooking;
+
 
 
 
@@ -57,29 +72,72 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         arrProduct = new ArrayList<product>();
+        arrHairStyle = new ArrayList<HairStyle>();
 
-
-        mDrawerlayout = findViewById(R.id.drawerlayout);
-        mToggle = new ActionBarDrawerToggle(this, mDrawerlayout, R.string.open, R.string.close);
-
-        mDrawerlayout.addDrawerListener(mToggle);
-        mToggle.syncState();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
-
-
-
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("User").child(firebaseUser.getUid());
 
+        getControls();
+
+
+
+        imgBooking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, BookingActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        LoadDataProduct();
+        LoadDataHairStyle();
+
+
+    }
+
+
+
+    private void getControls() {
         txtNameCustomer = findViewById(R.id.txtNameCustomer);
         txtEmail  = findViewById(R.id.txtEmail);
         txtPhoneNumber = findViewById(R.id.txtPhoneNumber);
+        imgBooking = findViewById(R.id.imgBooking);
 
         recyclerView = findViewById(R.id.recycleView);
-        LoadDataProduct();
+        recyclerViewHairStyle = findViewById(R.id.recycleViewHairStyle);
+        mDrawerlayout = findViewById(R.id.drawerlayout);
+        mToggle = new ActionBarDrawerToggle(this, mDrawerlayout, R.string.open, R.string.close);
+        mDrawerlayout.addDrawerListener(mToggle);
+        mToggle.syncState();
+    }
+
+
+    private void LoadDataHairStyle() {
+        reference = FirebaseDatabase.getInstance().getReference().child("HairStyle");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot:snapshot.getChildren())
+                {
+                    HairStyle hairStyle;
+                    hairStyle = dataSnapshot.getValue(HairStyle.class);
+                    arrHairStyle.add(hairStyle);
+                }
+                adapterHairStyle = new HairStyleAdapter(HomeActivity.this, arrHairStyle);
+                LinearLayoutManager manager  = new LinearLayoutManager(HomeActivity.this);
+                manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                recyclerViewHairStyle.setLayoutManager(manager);
+                recyclerViewHairStyle.setAdapter(adapterHairStyle);
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                Toast.makeText(HomeActivity.this, "Error", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void LoadDataProduct()
