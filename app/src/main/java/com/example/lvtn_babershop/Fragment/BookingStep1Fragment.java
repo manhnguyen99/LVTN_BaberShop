@@ -15,9 +15,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lvtn_babershop.Adapter.MySalonAdapter;
+import com.example.lvtn_babershop.Comon.Common;
 import com.example.lvtn_babershop.Comon.SpacesItemDecoration;
 import com.example.lvtn_babershop.Interface.AllCityLoadListener;
 import com.example.lvtn_babershop.Interface.BranchLoadListener;
+import com.example.lvtn_babershop.Interface.ITimeSlotLoadListener;
 import com.example.lvtn_babershop.Model.Salon;
 import com.example.lvtn_babershop.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -51,6 +53,9 @@ public class BookingStep1Fragment  extends Fragment implements AllCityLoadListen
     RecyclerView recyclerView;
     AlertDialog alertDialog;
 
+    ITimeSlotLoadListener iTimeSlotLoadListener;
+
+
 
     static BookingStep1Fragment instance;
     public static BookingStep1Fragment getInstance()
@@ -63,11 +68,12 @@ public class BookingStep1Fragment  extends Fragment implements AllCityLoadListen
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        allCityRef  = FirebaseDatabase.getInstance().getReference().child("Salon");
+        allCityRef  = FirebaseDatabase.getInstance().getReference("Salon");
 
         allCityLoadListener = this;
         branchLoadListener = this;
-        alertDialog = new SpotsDialog.Builder().setContext(getActivity()).build();
+
+        alertDialog = new SpotsDialog.Builder().setContext(getActivity()).setCancelable(false).build();
 
     }
 
@@ -123,12 +129,15 @@ public class BookingStep1Fragment  extends Fragment implements AllCityLoadListen
                 if(position > 0){
                     loadBranchOfCity(item.toString());
                 }
+                else
+                    recyclerView.setVisibility(View.GONE);
             }
         });
     }
 
     private void loadBranchOfCity(String cityName) {
         alertDialog.show();
+        Common.city = cityName;
         branchRef = FirebaseDatabase.getInstance()
                 .getReference("Salon")
                 .child(cityName)
@@ -140,7 +149,11 @@ public class BookingStep1Fragment  extends Fragment implements AllCityLoadListen
                 if(task.isSuccessful())
                 {
                     for (DataSnapshot dataSnapshot:task.getResult().getChildren()){
-                        list.add(dataSnapshot.getValue(Salon.class));
+                        {
+                            Salon salon =  dataSnapshot.getValue(Salon.class);
+                            salon.setSalonID(dataSnapshot.getKey());
+                            list.add(salon);
+                        }
                         branchLoadListener.onBranchLoadSuccess(list);
                     }
                 }
@@ -162,6 +175,7 @@ public class BookingStep1Fragment  extends Fragment implements AllCityLoadListen
     public void onBranchLoadSuccess(List<Salon> salonList) {
         MySalonAdapter adapter = new MySalonAdapter(getActivity(),salonList);
         recyclerView.setAdapter(adapter);
+        recyclerView.setVisibility(View.VISIBLE);
         alertDialog.dismiss();
     }
 

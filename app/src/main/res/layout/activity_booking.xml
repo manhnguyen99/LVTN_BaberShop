@@ -29,7 +29,7 @@
         app:sv_animationType="Line"
         android:fontFamily="cursive"
         />
-    <androidx.viewpager.widget.ViewPager
+    <com.example.lvtn_babershop.Comon.NonSwipeViewPager
         android:id="@+id/viewPager"
         android:layout_below="@+id/step_view"
         android:layout_width="match_parent"

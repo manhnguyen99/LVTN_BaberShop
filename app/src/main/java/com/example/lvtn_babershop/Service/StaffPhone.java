@@ -40,7 +40,6 @@ public class StaffPhone extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
 
         btnSendOTP.setOnClickListener(v -> {
-
             number = edtPhoneNumber.getText().toString().trim();
             String phoneNum = cpp.getSelectedCountryCodeWithPlus()+number;
             Intent intent = new Intent(StaffPhone.this, StaffSendOTP.class);
@@ -54,12 +53,5 @@ public class StaffPhone extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
-
-         btnSignWithEmail.setOnClickListener(v -> {
-             Intent intent = new Intent(StaffPhone.this, StaffLogin.class);
-             startActivity(intent);
-             finish();
-         });
-
     }
 }

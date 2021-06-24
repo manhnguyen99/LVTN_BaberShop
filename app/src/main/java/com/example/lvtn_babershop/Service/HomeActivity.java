@@ -81,8 +81,6 @@ public class HomeActivity extends AppCompatActivity {
 
         getControls();
 
-
-
         imgBooking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,9 +95,6 @@ public class HomeActivity extends AppCompatActivity {
 
 
     }
-
-
-
     private void getControls() {
         txtNameCustomer = findViewById(R.id.txtNameCustomer);
         txtEmail  = findViewById(R.id.txtEmail);
@@ -132,14 +127,12 @@ public class HomeActivity extends AppCompatActivity {
                 recyclerViewHairStyle.setLayoutManager(manager);
                 recyclerViewHairStyle.setAdapter(adapterHairStyle);
             }
-
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
                 Toast.makeText(HomeActivity.this, "Error", Toast.LENGTH_LONG).show();
             }
         });
     }
-
     private void LoadDataProduct()
     {
         reference = FirebaseDatabase.getInstance().getReference().child("product"); //child: chọn một nốt
@@ -170,9 +163,6 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 

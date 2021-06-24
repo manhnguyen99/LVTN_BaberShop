@@ -72,7 +72,6 @@ public class StaffLogin extends AppCompatActivity {
                                 else
                                 {
                                     ReusableCodeForAll.ShowAlert(StaffLogin.this,"Verification Failed","You Have Not Verified Your Email!!!");
-
                                 }
                             }
                             else
@@ -110,7 +109,6 @@ public class StaffLogin extends AppCompatActivity {
         catch (Exception e)
         {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-
         }
 
     }
