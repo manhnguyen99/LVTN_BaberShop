@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.lvtn_babershop.Comon.Common;
 import com.example.lvtn_babershop.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.hbb20.CountryCodePicker;
@@ -33,23 +34,17 @@ public class CustomerPhone extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
 
         btnSendOTP.setOnClickListener(v -> {
-
             number = edtPhoneNumber.getText().toString().trim();
             String phoneNum = cpp.getSelectedCountryCodeWithPlus()+number;
-            Intent intent = new Intent(CustomerPhone.this, StaffSendOTP.class);
+            Intent intent = new Intent(CustomerPhone.this, CustomerSendOTP.class);
             intent.putExtra("PhoneNum", phoneNum);
+            intent.putExtra(Common.IS_LOGIN, false);
             startActivity(intent);
             finish();
         });
 
         txtSignup.setOnClickListener(v -> {
-            Intent intent = new Intent(CustomerPhone.this, StaffSendOTP.class);
-            startActivity(intent);
-            finish();
-        });
-
-        btnSignWithEmail.setOnClickListener(v -> {
-            Intent intent = new Intent(CustomerPhone.this, StaffLogin.class);
+            Intent intent = new Intent(CustomerPhone.this, CustomerSendOTP.class);
             startActivity(intent);
             finish();
         });

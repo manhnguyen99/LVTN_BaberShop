@@ -22,8 +22,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.hbb20.CountryCodePicker;
 
 import java.util.ArrayList;
@@ -35,7 +33,7 @@ public class CustomerRegistration extends AppCompatActivity {
     String[] HANOI = {"Dong Da", "Ba Dinh", "Hoàn Kiếm"};
 
 
-    TextInputLayout Fname, Lname, Email, Pass, cfpass, mobileno, houseno, area;
+    TextInputLayout Fname, Lname, Email, Pass, cfpass, mobileno;
     Spinner cityspin, districspin;
     Button signup, Emaill, Phone;
     CountryCodePicker Cpp;
@@ -48,9 +46,6 @@ public class CustomerRegistration extends AppCompatActivity {
     String password;
     String confirmpassword;
     String mobile;
-    String house;
-    String Area;
-    String Postcode;
     String role = "Customer";
     String city;
     String district;
@@ -66,9 +61,6 @@ public class CustomerRegistration extends AppCompatActivity {
         Pass = (TextInputLayout) findViewById(R.id.edtPassword);
         cfpass = (TextInputLayout) findViewById(R.id.edtCPassword);
         mobileno = (TextInputLayout) findViewById(R.id.edtPhonenum);
-        houseno = (TextInputLayout) findViewById(R.id.houseNo);
-        area = (TextInputLayout) findViewById(R.id.Area);
-
 
         cityspin = (Spinner) findViewById(R.id.Statee);
         districspin = (Spinner) findViewById(R.id.Citys);
@@ -98,13 +90,11 @@ public class CustomerRegistration extends AppCompatActivity {
                         list.add(text);
                     }
                     ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(CustomerRegistration.this, android.R.layout.simple_spinner_item, list);
-
                     districspin.setAdapter(arrayAdapter);
                 }
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
@@ -123,10 +113,6 @@ public class CustomerRegistration extends AppCompatActivity {
                 mobile = mobileno.getEditText().getText().toString().trim();
                 password = Pass.getEditText().getText().toString().trim();
                 confirmpassword = cfpass.getEditText().getText().toString().trim();
-                Area = area.getEditText().getText().toString().trim();
-                house = houseno.getEditText().getText().toString().trim();
-
-
                 if (isValid()) {
 
                     final ProgressDialog mDialog = new ProgressDialog(CustomerRegistration.this);
@@ -151,8 +137,6 @@ public class CustomerRegistration extends AppCompatActivity {
                                         hashMappp.put("Lname", lname);
                                         hashMappp.put("EmailID", emailid);
                                         hashMappp.put("Mobile", mobile);
-                                        hashMappp.put("House", house);
-                                        hashMappp.put("Area", Area);
                                         hashMappp.put("City", city);
                                         hashMappp.put("Distric", district);
                                         hashMappp.put("Password", password);
@@ -163,7 +147,6 @@ public class CustomerRegistration extends AppCompatActivity {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 mDialog.dismiss();
-
                                                 FAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
@@ -172,9 +155,7 @@ public class CustomerRegistration extends AppCompatActivity {
                                                             builder.setMessage("Registered Successfully,Please Verify your Email");
                                                             builder.setCancelable(false);
                                                             builder.setPositiveButton("OK", (dialog, which) -> {
-
                                                                 dialog.dismiss();
-
                                                                 String phonenumber = Cpp.getSelectedCountryCodeWithPlus() + mobile;
                                                                 Intent b = new Intent(CustomerRegistration.this, StaffVerifyPhone.class);
                                                                 b.putExtra("phonenumber", phonenumber);
@@ -209,17 +190,14 @@ public class CustomerRegistration extends AppCompatActivity {
         Emaill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent i = new Intent(CustomerRegistration.this, StaffLogin.class);
+                Intent i = new Intent(CustomerRegistration.this, CustomerLogin.class);
                 startActivity(i);
                 finish();
             }
         });
-
         Phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent e = new Intent(CustomerRegistration.this, StaffPhone.class);
                 startActivity(e);
                 finish();
@@ -248,12 +226,8 @@ public class CustomerRegistration extends AppCompatActivity {
         mobileno.setError("");
         cfpass.setErrorEnabled(false);
         cfpass.setError("");
-        area.setErrorEnabled(false);
-        area.setError("");
-        houseno.setErrorEnabled(false);
-        houseno.setError("");
 
-        boolean isValidname = false, isValidemail = false, isvalidpassword = false, isvalidconfirmpassword = false, isvalid = false, isvalidmobileno = false, isvalidlname = false, isvalidhousestreetno = false, isvalidarea = false;
+        boolean isValidname = false, isValidemail = false, isvalidpassword = false, isvalidconfirmpassword = false, isvalid = false, isvalidmobileno = false, isvalidlname = false;
         if (TextUtils.isEmpty(fname)) {
             Fname.setErrorEnabled(true);
             Fname.setError("Firstname is required");
@@ -311,19 +285,8 @@ public class CustomerRegistration extends AppCompatActivity {
                 isvalidmobileno = true;
             }
         }
-        if (TextUtils.isEmpty(house)) {
-            houseno.setErrorEnabled(true);
-            houseno.setError("Field cannot be empty");
-        } else {
-            isvalidhousestreetno = true;
-        }
-        if (TextUtils.isEmpty(Area)) {
-            area.setErrorEnabled(true);
-            area.setError("Field cannot be empty");
-        } else {
-            isvalidarea = true;
-        }
-        isvalid = (isValidname  && isvalidlname && isValidemail && isvalidconfirmpassword && isvalidpassword && isvalidmobileno && isvalidarea && isvalidhousestreetno) ? true : false;
+
+        isvalid = (isValidname  && isvalidlname && isValidemail && isvalidconfirmpassword && isvalidpassword && isvalidmobileno) ? true : false;
         return isvalid;
     }
 }

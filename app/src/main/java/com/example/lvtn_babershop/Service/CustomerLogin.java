@@ -1,6 +1,5 @@
 package com.example.lvtn_babershop.Service;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
@@ -12,16 +11,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.lvtn_babershop.Comon.Common;
 import com.example.lvtn_babershop.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-import org.jetbrains.annotations.NotNull;
-
-public class StaffLogin extends AppCompatActivity {
+public class CustomerLogin extends AppCompatActivity {
 
     TextInputLayout edtEmail, edtPass;
     Button btnSigin, btnSiginphone;
@@ -50,7 +45,7 @@ public class StaffLogin extends AppCompatActivity {
                     emailid = edtEmail.getEditText().getText().toString().trim();
                     password = edtPass.getEditText().getText().toString().trim();
                     if(isValid()){
-                        final ProgressDialog mDialog = new ProgressDialog(StaffLogin.this);
+                        final ProgressDialog mDialog = new ProgressDialog(CustomerLogin.this);
                         mDialog.setCanceledOnTouchOutside(false);
                         mDialog.setCancelable(false);
                         mDialog.setMessage("Sign In Please Wait...");
@@ -63,21 +58,22 @@ public class StaffLogin extends AppCompatActivity {
                                 if(firebaseAuth.getCurrentUser().isEmailVerified()) {
 
                                     mDialog.dismiss();
-                                    Toast.makeText(StaffLogin.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(StaffLogin.this, HomeActivity.class);
+                                    Toast.makeText(CustomerLogin.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(CustomerLogin.this, HomeActivity.class);
+                                    intent.putExtra(Common.IS_LOGIN, true);
                                     startActivity(intent);
                                     finish();
 
                                 }
                                 else
                                 {
-                                    ReusableCodeForAll.ShowAlert(StaffLogin.this,"Verification Failed","You Have Not Verified Your Email!!!");
+                                    ReusableCodeForAll.ShowAlert(CustomerLogin.this,"Verification Failed","You Have Not Verified Your Email!!!");
                                 }
                             }
                             else
                             {
                                 mDialog.dismiss();
-                                ReusableCodeForAll.ShowAlert(StaffLogin.this, "Error", task.getException().getMessage());
+                                ReusableCodeForAll.ShowAlert(CustomerLogin.this, "Error", task.getException().getMessage());
 
                             }
                         });
@@ -87,21 +83,14 @@ public class StaffLogin extends AppCompatActivity {
             txtCreateAccount.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(StaffLogin.this, StaffRegistration.class ));
-                    finish();
-                }
-            });
-            txtForgotPassword.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(StaffLogin.this, StaffForgotPassword.class));
+                    startActivity(new Intent(CustomerLogin.this, CustomerRegistration.class ));
                     finish();
                 }
             });
             btnSiginphone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(StaffLogin.this, StaffPhone.class));
+                    startActivity(new Intent(CustomerLogin.this, StaffPhone.class));
                     finish();
                 }
             });

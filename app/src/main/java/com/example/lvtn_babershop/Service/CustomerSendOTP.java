@@ -21,13 +21,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.hbb20.CountryCodePicker;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
 
-public class StaffSendOTP extends AppCompatActivity {
+public class CustomerSendOTP extends AppCompatActivity {
     String verificationId;
     FirebaseAuth FAuth;
     Button btnVerify, btnResendOTP;
@@ -125,7 +124,7 @@ public class StaffSendOTP extends AppCompatActivity {
         }
         @Override
         public void onVerificationFailed(@NonNull @NotNull FirebaseException e) {
-            Toast.makeText(StaffSendOTP.this, e.getMessage(),Toast.LENGTH_LONG).show();
+            Toast.makeText(CustomerSendOTP.this, e.getMessage(),Toast.LENGTH_LONG).show();
         }
         @Override
         public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken){
@@ -143,12 +142,12 @@ public class StaffSendOTP extends AppCompatActivity {
                   @Override
                   public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
                       if(task.isSuccessful()){
-                          startActivity(new Intent(StaffSendOTP.this, HomeActivity.class));
+                          startActivity(new Intent(CustomerSendOTP.this, HomeActivity.class));
                             finish();
                       }
                       else
                       {
-                          ReusableCodeForAll.ShowAlert(StaffSendOTP.this,"Error", task.getException().getMessage());
+                          ReusableCodeForAll.ShowAlert(CustomerSendOTP.this,"Error", task.getException().getMessage());
                       }
                   }
               });

@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.lvtn_babershop.Comon.Common;
 import com.example.lvtn_babershop.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -54,26 +55,18 @@ public class MainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-
                 Fauth = FirebaseAuth.getInstance();
                 if (Fauth.getCurrentUser() != null) {
                     if (Fauth.getCurrentUser().isEmailVerified()) {
                         Fauth = FirebaseAuth.getInstance();
-                        databaseReference = FirebaseDatabase.getInstance().getReference("User").child(FirebaseAuth.getInstance().getUid() + "/Role");
+                        databaseReference = FirebaseDatabase.getInstance().getReference("User");
                         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                String role = dataSnapshot.getValue(String.class);
-                                if (role.equals("Staff")) {
                                     Intent n = new Intent(MainActivity.this, HomeActivity.class);
+                                    n.putExtra(Common.IS_LOGIN,false);
                                     startActivity(n);
                                     finish();
-                                }
-                                if (role.equals("Customer")) {
-                                    Intent a = new Intent(MainActivity.this, HomeActivity.class);
-                                    startActivity(a);
-                                    finish();
-                                }
                             }
 
                             @Override
@@ -90,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
                         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-
                                 dialog.dismiss();
                                 Intent intent = new Intent(MainActivity.this, MainMenu.class);
                                 startActivity(intent);

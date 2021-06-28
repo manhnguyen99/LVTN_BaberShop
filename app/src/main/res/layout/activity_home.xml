@@ -7,8 +7,8 @@
     tools:context=".Service.HomeActivity"
     android:fitsSystemWindows="true"
     android:id="@+id/drawerlayout"
-
     >
+
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -16,11 +16,34 @@
         app:menu="@menu/home_menu"
         app:headerLayout="@layout/header">
     </com.google.android.material.navigation.NavigationView>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_marginBottom="10dp">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:weightSum="4"
+            android:padding="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:src="@drawable/ic_baseline_account_circle_24"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginLeft="10dp"
+                />
+            <TextView
+                android:id="@+id/txtNameCus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Manh"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                />
+
+        </LinearLayout>
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">

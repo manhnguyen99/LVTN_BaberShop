@@ -2,6 +2,12 @@ package com.example.lvtn_babershop.Comon;
 
 import com.example.lvtn_babershop.Model.Baber;
 import com.example.lvtn_babershop.Model.Salon;
+import com.example.lvtn_babershop.Model.TimeSlot;
+import com.example.lvtn_babershop.Model.User;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class Common {
     public static final String KEY_ENABLE_BUTTON_NEXT = "ENABLE_BUTTON_NEXT";
@@ -11,10 +17,18 @@ public class Common {
     public static final String KEY_STEP = "STEP";
     public static final String KEY_BABER_SELECTED = "BABER_SELECTED";
     public static final int TIME_SLOT_TOTAL = 20;
+    public static final Object DISABLE_TAG = "DISABLE";
+    public static final String KEY_TIME_SLOT = "TIME_SLOT";
+    public static final String KEY_CONFIRM_BOOKING = "CONFIRM_BOOKING";
+    public static final String IS_LOGIN = "isLOGIN";
+    public static User currentUser;
     public static Salon currentSalon;
     public static int step = 0; //init first step is 0
     public static String city ="";
     public static Baber currentBaber;
+    public static int currentTimeSlot = 1;
+    public static Calendar currentDate = Calendar.getInstance();
+    public static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd_MM_yyyy");
 
     public static String convertTimeSlotToString(int slot) {
         switch (slot)

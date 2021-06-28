@@ -25,7 +25,6 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
-
 public class CustomerVerifyPhone extends AppCompatActivity {
     String verificationId;
     FirebaseAuth FAuth;
@@ -39,20 +38,14 @@ public class CustomerVerifyPhone extends AppCompatActivity {
         setContentView(R.layout.activity_customer_verify_phone);
         phoneNum = getIntent().getStringExtra("phonenumber").trim();
         sendverifycaptioncode(phoneNum);
-
         edtEnterOTP = findViewById(R.id.edtPhoneOTP);
         txt=  findViewById(R.id.text);
         btnVerify = findViewById(R.id.btnVerifyOTP);
         btnResendOTP = findViewById(R.id.btnResendOTP);
         FAuth = FirebaseAuth.getInstance();
-
         btnResendOTP.setVisibility(View.INVISIBLE);
         txt.setVisibility(View.INVISIBLE);
-
-
-
         btnVerify.setOnClickListener(v -> {
-
             String code = edtEnterOTP.getText().toString().trim();
             btnResendOTP.setVisibility(View.INVISIBLE);
 

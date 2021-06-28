@@ -128,33 +128,6 @@
 
             </LinearLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/houseNo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="House/Street no"
-                    android:inputType="text" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/Area"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Area"
-                    android:inputType="textMultiLine" />
-            </com.google.android.material.textfield.TextInputLayout>
-
             <TextView
                 android:id="@+id/txt1"
                 android:layout_width="match_parent"
@@ -200,7 +173,6 @@
                 android:layout_marginTop="10dp"
                 android:layout_gravity="center_horizontal"
                 android:orientation="horizontal">
-
                 <TableRow
                     android:id="@+id/hr"
                     android:layout_width="105dp"
@@ -217,14 +189,12 @@
                     android:text="OR"
                     android:textAlignment="center"
                     android:textSize="17dp" />
-
                 <TableRow
                     android:id="@+id/dr"
                     android:layout_width="105dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="20dp"
                     android:background="#878787" />
-
             </LinearLayout>
 
             <TextView

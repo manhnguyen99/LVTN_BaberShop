@@ -16,14 +16,11 @@
         <activity android:name=".Service.CustomerPhone" />
         <activity android:name=".Service.CustomerRegistration" />
         <activity android:name=".Service.MainMenu" />
-        <activity android:name=".Service.StaffSendOTP" />
-        <activity android:name=".Service.StaffForgotPassword" />
+        <activity android:name=".Service.CustomerSendOTP" />
         <activity android:name=".Service.StaffVerifyPhone" />
-        <activity android:name=".Service.Login" />
         <activity android:name=".Service.StaffRegistration" />
         <activity android:name=".Service.StaffPhone" />
-        <activity android:name=".Service.StaffLogin" />
-        <activity android:name=".Service.ChooseOne" />
+        <activity android:name=".Service.CustomerLogin" />
         <activity android:name=".Service.HomeActivity" />
         <activity android:name=".Service.MainActivity">
             <intent-filter>

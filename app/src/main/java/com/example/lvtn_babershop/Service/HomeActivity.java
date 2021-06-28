@@ -2,24 +2,23 @@ package com.example.lvtn_babershop.Service;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.lvtn_babershop.Comon.Common;
 import com.example.lvtn_babershop.Model.HairStyle;
 import com.example.lvtn_babershop.Model.HairStyleAdapter;
 import com.example.lvtn_babershop.Model.ProductAdapter;
@@ -27,6 +26,7 @@ import com.example.lvtn_babershop.Model.User;
 import com.example.lvtn_babershop.Model.product;
 import com.example.lvtn_babershop.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,15 +35,18 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
+
+    private FirebaseUser firebaseUser;
+    private  DatabaseReference  reference;
+    private  String userID;
 
 
     private DrawerLayout mDrawerlayout;
@@ -57,11 +60,11 @@ public class HomeActivity extends AppCompatActivity {
 
     RecyclerView recyclerView, recyclerViewHairStyle;
 
-    FirebaseUser firebaseUser;
-    DatabaseReference reference;
 
     TextView txtNameCustomer, txtEmail, txtPhoneNumber;
     ImageView imgBooking;
+
+
 
 
 
@@ -76,10 +79,11 @@ public class HomeActivity extends AppCompatActivity {
 
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        reference = FirebaseDatabase.getInstance().getReference("User").child(firebaseUser.getUid());
 
+        checkCustomerInfo();
         getControls();
+
+
 
         imgBooking.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,10 +97,28 @@ public class HomeActivity extends AppCompatActivity {
         LoadDataProduct();
         LoadDataHairStyle();
 
-
     }
+
+    private void checkCustomerInfo() {
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        reference = FirebaseDatabase.getInstance().getReference("Customer");
+        userID = firebaseUser.getUid();
+        reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                Common.currentUser = snapshot.getValue(User.class);
+                txtNameCustomer.setText(Common.currentUser.getLname());
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+    }
+
     private void getControls() {
-        txtNameCustomer = findViewById(R.id.txtNameCustomer);
+        txtNameCustomer = findViewById(R.id.txtNameCus);
         txtEmail  = findViewById(R.id.txtEmail);
         txtPhoneNumber = findViewById(R.id.txtPhoneNumber);
         imgBooking = findViewById(R.id.imgBooking);
@@ -170,7 +192,7 @@ public class HomeActivity extends AppCompatActivity {
 
             case R.id.logout:
                 FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(HomeActivity.this, StaffLogin.class));
+                startActivity(new Intent(HomeActivity.this, CustomerLogin.class));
                 finish();
                 return true;
         }

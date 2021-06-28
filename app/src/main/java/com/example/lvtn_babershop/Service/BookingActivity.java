@@ -49,7 +49,6 @@ public class BookingActivity extends AppCompatActivity {
     NonSwipeViewPager viewPager;
     Button btnPre, btnNext;
 
-
     //Broadcast Receiver
     private BroadcastReceiver buttonNextReceiver = new BroadcastReceiver() {
         @Override
@@ -60,6 +59,8 @@ public class BookingActivity extends AppCompatActivity {
                 Common.currentSalon = intent.getParcelableExtra(Common.KEY_SALON_STORE);
             else if(step == 2)
                 Common.currentBaber = intent.getParcelableExtra(Common.KEY_BABER_SELECTED);
+            else if(step == 3)
+                Common.currentTimeSlot = intent.getIntExtra(Common.KEY_TIME_SLOT, -1);
             btnNext.setEnabled(true);
             setColorButton();
         }
@@ -128,8 +129,19 @@ public class BookingActivity extends AppCompatActivity {
                         if(Common.currentBaber != null)
                             loadTimeSlotOfBaber(Common.currentBaber.getBaberId());
                     }
+                    else if(Common.step ==  3)
+                    {
+                        if (Common.currentTimeSlot != -1)
+                            confirmBooking();
+                    }
                     viewPager.setCurrentItem(Common.step);
                 }
+            }
+
+            private void confirmBooking() {
+                //send broadcast to fragment step 4
+                Intent intent = new Intent(Common.KEY_CONFIRM_BOOKING);
+                localBroadcastManager.sendBroadcast(intent);
             }
 
             private void loadTimeSlotOfBaber(String baberId) {
@@ -184,6 +196,11 @@ public class BookingActivity extends AppCompatActivity {
                 {
                     Common.step--;
                     viewPager.setCurrentItem(Common.step);
+                    if (Common.step < 3) //Nếu step < 3 next luôn bật
+                    {
+                        btnNext.setEnabled(true);
+                        setColorButton();
+                    }
                 }
             }
         });

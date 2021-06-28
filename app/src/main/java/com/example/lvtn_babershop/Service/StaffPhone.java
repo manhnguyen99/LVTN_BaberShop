@@ -4,17 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.lvtn_babershop.R;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.hbb20.CountryCodePicker;
 
 public class StaffPhone extends AppCompatActivity {
@@ -42,14 +37,14 @@ public class StaffPhone extends AppCompatActivity {
         btnSendOTP.setOnClickListener(v -> {
             number = edtPhoneNumber.getText().toString().trim();
             String phoneNum = cpp.getSelectedCountryCodeWithPlus()+number;
-            Intent intent = new Intent(StaffPhone.this, StaffSendOTP.class);
+            Intent intent = new Intent(StaffPhone.this, CustomerSendOTP.class);
             intent.putExtra("PhoneNum", phoneNum);
             startActivity(intent);
             finish();
         });
 
         txtSignup.setOnClickListener(v -> {
-            Intent intent = new Intent(StaffPhone.this, StaffSendOTP.class);
+            Intent intent = new Intent(StaffPhone.this, CustomerSendOTP.class);
             startActivity(intent);
             finish();
         });

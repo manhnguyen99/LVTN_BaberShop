@@ -26,19 +26,19 @@ public class MainMenu extends AppCompatActivity {
         btnSignup = findViewById(R.id.btnSigup);
 
         btnSignWithMail.setOnClickListener(v -> {
-            Intent intent = new Intent(MainMenu.this, ChooseOne.class);
+            Intent intent = new Intent(MainMenu.this, CustomerLogin.class);
             intent.putExtra("Home", "Email");
             startActivity(intent);
             finish();
         });
         btnSignWithPhone.setOnClickListener(v -> {
-            Intent intent = new Intent( MainMenu.this, ChooseOne.class);
+            Intent intent = new Intent( MainMenu.this, CustomerPhone.class);
             intent.putExtra("Home", "Phone");
             startActivity(intent);
             finish();
         });
         btnSignup.setOnClickListener(v -> {
-            Intent intent = new Intent(MainMenu.this, ChooseOne.class);
+            Intent intent = new Intent(MainMenu.this, CustomerRegistration.class);
             intent.putExtra("Home", "Signup");
             startActivity(intent);
             finish();
@@ -50,5 +50,4 @@ public class MainMenu extends AppCompatActivity {
         super.onDestroy();
         System.gc();
     }
-
 }
