@@ -44,7 +44,6 @@ public class BookingStep2Fragment extends Fragment {
             recycler_baber.setAdapter(adapter);
         }
     };
-
     static BookingStep2Fragment instance;
     public static BookingStep2Fragment getInstance()
     {
@@ -75,10 +74,8 @@ public class BookingStep2Fragment extends Fragment {
         recycler_baber = itemView.findViewById(R.id.recycler_baber);
 
         initView();
-
         return itemView;
     }
-
     private void initView() {
         recycler_baber.setHasFixedSize(true);
         recycler_baber.setLayoutManager(new GridLayoutManager(getActivity(),2));

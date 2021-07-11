@@ -62,7 +62,6 @@ public class MyBaberAdapter extends RecyclerView.Adapter<MyBaberAdapter.MyViewHo
                     cardView.setCardBackgroundColor(context.getResources()
                             .getColor(android.R.color.white));
                 }
-
                 //dat background cho item da duoc chon
                 holder.cardBarber.setCardBackgroundColor(
                         context.getResources()

@@ -78,4 +78,8 @@ public class Common {
 
         }
     }
+
+    public static String formartShoppingItemName(String name) {
+        return name.length() > 20 ? new StringBuilder(name.substring(0,20)).append("...").toString():name;
+    }
 }

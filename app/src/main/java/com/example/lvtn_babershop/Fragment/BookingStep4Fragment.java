@@ -20,17 +20,18 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.example.lvtn_babershop.Comon.Common;
 import com.example.lvtn_babershop.Model.BookingInformation;
 import com.example.lvtn_babershop.R;
-import com.example.lvtn_babershop.Service.HomeActivity;
-import com.example.lvtn_babershop.Service.MainActivity;
+import com.example.lvtn_babershop.Activity.HomeActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -55,6 +56,7 @@ public class BookingStep4Fragment extends Fragment {
         txtSalonWebsite.setText(Common.currentSalon.getWebsite());
         txtSalonName.setText(Common.currentSalon.getNameSalon());
         txtSalonOpenHours.setText(Common.currentSalon.getOpenHours());
+        txtSalonPhoneNumber.setText(Common.currentSalon.getPhone());
     }
     static BookingStep4Fragment instance;
     public static BookingStep4Fragment getInstance()
@@ -102,8 +104,9 @@ public class BookingStep4Fragment extends Fragment {
                 bookingInformation.setSalonID(Common.currentSalon.getSalonID());
                 bookingInformation.setSalonAddress(Common.currentSalon.getAddressSalon());
                 bookingInformation. setSalonName(Common.currentSalon.getNameSalon());
+                bookingInformation.setPhone(Common.currentSalon.getPhone());
                 bookingInformation.setTime(new StringBuilder(Common.convertTimeSlotToString(Common.currentTimeSlot))
-                        .append("at: ")
+                        .append("  at: ")
                         .append(simpleDateFormat.format(Common.currentDate.getTime())).toString());
                 bookingInformation.setSlot(Long.valueOf(Common.currentTimeSlot));
 
@@ -116,6 +119,20 @@ public class BookingStep4Fragment extends Fragment {
                         .child(Common.currentBaber.getBaberId())
                         .child(Common.simpleDateFormat.format(Common.currentDate.getTime()))
                         .child(String.valueOf(Common.currentTimeSlot));
+                String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                DatabaseReference userBooking = FirebaseDatabase.getInstance().getReference("Customer").child(userid).child("booking");
+                userBooking.setValue(bookingInformation)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull @NotNull Task<Void> task) {
+                                Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull @NotNull Exception e) {
+                        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
                 //write data
                 bookingDate.setValue(bookingInformation)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -136,12 +153,11 @@ public class BookingStep4Fragment extends Fragment {
         });
         return itemView;
     }
-
     private void resetStaticData() {
-        Common.step = 0;
-        Common.currentTimeSlot = -1;
-        Common.currentSalon = null;
-        Common.currentBaber = null;
-        Common.currentDate.add(Calendar.DATE, 0);
+//        Common.step = 0;
+//        Common.currentTimeSlot = -1;
+//        Common.currentSalon = null;
+//        Common.currentBaber = null;
+//        Common.currentDate.add(Calendar.DATE, 0);
     }
 }

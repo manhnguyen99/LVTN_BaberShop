@@ -1,10 +1,8 @@
-package com.example.lvtn_babershop.Service;
+package com.example.lvtn_babershop.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.arch.core.executor.TaskExecutor;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -17,7 +15,6 @@ import android.widget.Toast;
 import com.example.lvtn_babershop.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.TaskExecutors;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,20 +26,21 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
 
-public class StaffVerifyPhone extends AppCompatActivity {
+public class CustomerSendOTP extends AppCompatActivity {
+
     String verificationId;
     FirebaseAuth FAuth;
     Button btnVerify, btnResendOTP;
     TextView txt;
     EditText edtEnterOTP;
     String phoneNum;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_staff_verify_phone);
+        setContentView(R.layout.activity_staff_send_otp);
 
-        phoneNum = getIntent().getStringExtra("phonenumber").trim();
-        sendverifycaptioncode(phoneNum);
+        phoneNum = getIntent().getStringExtra("PhoneNum").trim();
 
         edtEnterOTP = findViewById(R.id.edtPhoneOTP);
         txt=  findViewById(R.id.text);
@@ -53,7 +51,7 @@ public class StaffVerifyPhone extends AppCompatActivity {
         btnResendOTP.setVisibility(View.INVISIBLE);
         txt.setVisibility(View.INVISIBLE);
 
-
+        sendverifycaptioncode(phoneNum);
 
         btnVerify.setOnClickListener(v -> {
 
@@ -83,8 +81,8 @@ public class StaffVerifyPhone extends AppCompatActivity {
         btnResendOTP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                 btnResendOTP.setVisibility(View.INVISIBLE);
-                 ResendOTP(phoneNum);
+                btnResendOTP.setVisibility(View.INVISIBLE);
+                ResendOTP(phoneNum);
 
                 new CountDownTimer(60000, 1000) {
                     @Override
@@ -102,11 +100,9 @@ public class StaffVerifyPhone extends AppCompatActivity {
             }
         });
     }
-
     private void ResendOTP(String phone) {
         sendverifycaptioncode(phone);
     }
-
     private void sendverifycaptioncode(String number) {
         PhoneAuthProvider.verifyPhoneNumber(
                 PhoneAuthOptions
@@ -126,10 +122,9 @@ public class StaffVerifyPhone extends AppCompatActivity {
                 verifycode(code);
             }
         }
-
         @Override
         public void onVerificationFailed(@NonNull @NotNull FirebaseException e) {
-            Toast.makeText(StaffVerifyPhone.this, e.getMessage(),Toast.LENGTH_LONG).show();
+            Toast.makeText(CustomerSendOTP.this, e.getMessage(),Toast.LENGTH_LONG).show();
         }
         @Override
         public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken){
@@ -137,27 +132,24 @@ public class StaffVerifyPhone extends AppCompatActivity {
             verificationId = s;
         }
     };
-
     private void verifycode(String code) {
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
-        linkCredential(credential);
+        signWithPhone(credential);
     }
-
-    private void linkCredential(PhoneAuthCredential credential) {
-        FAuth.getCurrentUser().linkWithCredential(credential)
-                .addOnCompleteListener(StaffVerifyPhone.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
-                        if (task.isSuccessful()){
-                            Intent intent = new Intent(StaffVerifyPhone.this, HomeActivity.class);
-                            startActivity(intent);
+    private void signWithPhone(PhoneAuthCredential credential) {
+      FAuth.signInWithCredential(credential)
+              .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                  @Override
+                  public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
+                      if(task.isSuccessful()){
+                          startActivity(new Intent(CustomerSendOTP.this, HomeActivity.class));
                             finish();
-                        }
-                        else
-                        {
-                            ReusableCodeForAll.ShowAlert(StaffVerifyPhone.this, "Error", task.getException().getMessage());
-                        }
-                    }
-                });
+                      }
+                      else
+                      {
+                          ReusableCodeForAll.ShowAlert(CustomerSendOTP.this,"Error", task.getException().getMessage());
+                      }
+                  }
+              });
     }
 }

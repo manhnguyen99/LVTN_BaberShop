@@ -9,7 +9,6 @@ public class Salon implements Parcelable {
 
     public Salon() {
     }
-
     protected Salon(Parcel in) {
         nameSalon = in.readString();
         addressSalon = in.readString();

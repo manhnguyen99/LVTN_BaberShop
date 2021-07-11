@@ -55,8 +55,6 @@ public class BookingStep1Fragment  extends Fragment implements AllCityLoadListen
 
     ITimeSlotLoadListener iTimeSlotLoadListener;
 
-
-
     static BookingStep1Fragment instance;
     public static BookingStep1Fragment getInstance()
     {
@@ -96,7 +94,6 @@ public class BookingStep1Fragment  extends Fragment implements AllCityLoadListen
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
         recyclerView.addItemDecoration(new SpacesItemDecoration(4));
     }
-
     private void LoadAllCity() {
         allCityRef.get()
                 .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {

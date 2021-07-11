@@ -3,26 +3,25 @@
     package="com.example.lvtn_babershop">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="Booking BaberShop"
+        android:label="BookingBaberShop"
         android:roundIcon="@mipmap/daidien"
         android:supportsRtl="true"
         android:theme="@style/Theme.LVTN_BaberShop">
-        <activity android:name=".Service.BookingActivity"></activity>
-        <activity android:name=".Service.CustomerVerifyPhone" />
-        <activity android:name=".Service.CustomerPhone" />
-        <activity android:name=".Service.CustomerRegistration" />
-        <activity android:name=".Service.MainMenu" />
-        <activity android:name=".Service.CustomerSendOTP" />
-        <activity android:name=".Service.StaffVerifyPhone" />
-        <activity android:name=".Service.StaffRegistration" />
-        <activity android:name=".Service.StaffPhone" />
-        <activity android:name=".Service.CustomerLogin" />
-        <activity android:name=".Service.HomeActivity" />
-        <activity android:name=".Service.MainActivity">
+        <activity android:name=".Activity.BookingActivity"></activity>
+        <activity android:name=".Activity.CustomerVerifyPhone" />
+        <activity android:name=".Activity.CustomerPhone" />
+        <activity android:name=".Activity.CustomerRegistration" />
+        <activity android:name=".Activity.MainMenu" />
+        <activity android:name=".Activity.CustomerSendOTP" />
+        <activity android:name=".Activity.StaffVerifyPhone" />
+        <activity android:name=".Activity.StaffRegistration" />
+        <activity android:name=".Activity.StaffPhone" />
+        <activity android:name=".Activity.CustomerLogin" />
+        <activity android:name=".Activity.HomeActivity" />
+        <activity android:name=".Activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

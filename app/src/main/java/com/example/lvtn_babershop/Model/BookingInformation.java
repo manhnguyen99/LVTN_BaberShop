@@ -1,13 +1,13 @@
 package com.example.lvtn_babershop.Model;
 
 public class BookingInformation {
-    private  String Fname, customerPhone, time, barberId, barberName, salonID,salonName, salonAddress;
+    private  String Fname, customerPhone, time, barberId, barberName, salonID,salonName, salonAddress, phone;
     private Long slot;
 
     public BookingInformation() {
     }
 
-    public BookingInformation(String customerName, String customerPhone, String time, String barberId, String barberName, String salonID, String salonName, String salonAddress, Long slot) {
+    public BookingInformation(String customerName, String customerPhone, String time, String barberId, String barberName, String salonID, String salonName, String salonAddress,String phone, Long slot) {
 
         this.Fname = customerName;
         this.customerPhone = customerPhone;
@@ -17,6 +17,7 @@ public class BookingInformation {
         this.salonID = salonID;
         this.salonName = salonName;
         this.salonAddress = salonAddress;
+        this.phone = phone;
         this.slot = slot;
     }
 
@@ -82,6 +83,14 @@ public class BookingInformation {
 
     public void setSalonAddress(String salonAddress) {
         this.salonAddress = salonAddress;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public Long getSlot() {

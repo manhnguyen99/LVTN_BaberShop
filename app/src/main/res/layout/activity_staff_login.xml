@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/baber_bg1"
-    tools:context=".Service.CustomerLogin">
+    tools:context=".Activity.CustomerLogin">
     <LinearLayout
         android:id="@+id/linearlayout"
         android:layout_width="280dp"

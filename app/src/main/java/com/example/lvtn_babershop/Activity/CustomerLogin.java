@@ -1,4 +1,4 @@
-package com.example.lvtn_babershop.Service;
+package com.example.lvtn_babershop.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,7 +20,7 @@ public class CustomerLogin extends AppCompatActivity {
 
     TextInputLayout edtEmail, edtPass;
     Button btnSigin, btnSiginphone;
-    TextView txtForgotPassword, txtSignup, txtCreateAccount;
+    TextView txtForgotPassword, txtCreateAccount;
     String emailid, password;
     FirebaseAuth firebaseAuth;
 
@@ -56,14 +56,12 @@ public class CustomerLogin extends AppCompatActivity {
                                 mDialog.dismiss();
 
                                 if(firebaseAuth.getCurrentUser().isEmailVerified()) {
-
                                     mDialog.dismiss();
                                     Toast.makeText(CustomerLogin.this, "Login Successful", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(CustomerLogin.this, HomeActivity.class);
                                     intent.putExtra(Common.IS_LOGIN, true);
                                     startActivity(intent);
                                     finish();
-
                                 }
                                 else
                                 {
@@ -74,7 +72,6 @@ public class CustomerLogin extends AppCompatActivity {
                             {
                                 mDialog.dismiss();
                                 ReusableCodeForAll.ShowAlert(CustomerLogin.this, "Error", task.getException().getMessage());
-
                             }
                         });
                     }

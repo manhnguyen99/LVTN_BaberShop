@@ -1,4 +1,4 @@
-package com.example.lvtn_babershop.Service;
+package com.example.lvtn_babershop.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -97,11 +97,8 @@ public class CustomerRegistration extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-
-
         databaseReference = firebaseDatabase.getInstance().getReference("Customer");
         FAuth = FirebaseAuth.getInstance();
-
 
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,7 +125,7 @@ public class CustomerRegistration extends AppCompatActivity {
                                 String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
                                 databaseReference = FirebaseDatabase.getInstance().getReference("User").child(userid);
                                 final HashMap<String,String> hashMap = new HashMap<>();
-                                hashMap.put("Role", role); //Role là vai trò (Customer hoặc Staff)
+//                                hashMap.put("Role", role); //Role là vai trò (Customer hoặc Staff)
                                 databaseReference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {

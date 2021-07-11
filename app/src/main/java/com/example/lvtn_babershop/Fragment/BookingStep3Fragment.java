@@ -149,13 +149,11 @@ public class BookingStep3Fragment extends Fragment implements ITimeSlotLoadListe
         simpleDateFormat = new SimpleDateFormat("dd_MM_yyyy");
         dialog = new SpotsDialog.Builder().setContext(getContext()).setCancelable(false).build();
     }
-
     @Override
     public void onDestroy() {
         localBroadcastManager.unregisterReceiver(displayTimeSlot);
         super.onDestroy();
     }
-
     @Nullable
     @org.jetbrains.annotations.Nullable
     @Override
@@ -201,14 +199,12 @@ public class BookingStep3Fragment extends Fragment implements ITimeSlotLoadListe
             }
         });
     }
-
     @Override
     public void onTimeSlotLoadSuccess(List<TimeSlot> timeSlotList) {
         MyTimeSlotAdapter adapter = new MyTimeSlotAdapter(getContext(),timeSlotList);
         recyclerTimeSlot.setAdapter(adapter);
         dialog.dismiss();
     }
-
     @Override
     public void onTimeSlotLoadFailed(String message) {
 

@@ -41,7 +41,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         }
     }
 
-
     @NonNull
     @NotNull
     @Override
@@ -52,7 +51,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     @Override
     public void onBindViewHolder(@NonNull @NotNull ProductAdapter.MyViewHolder holder, int position) {
 
-      product pro =   productList.get(position);
+      product pro =  productList.get(position);
       holder.txtNameProduct.setText(pro.getNameProduct());
       holder.txtInfoProduct.setText(pro.getInfoProduct());
       holder.txtPriceProduct.setText(pro.getPrice());

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/baber_bg1"
-    tools:context=".Service.BookingActivity">
+    tools:context=".Activity.BookingActivity">
     <com.shuhart.stepview.StepView
         android:id="@+id/step_view"
         android:layout_width="match_parent"

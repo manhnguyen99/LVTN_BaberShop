@@ -1,7 +1,6 @@
-package com.example.lvtn_babershop.Service;
+package com.example.lvtn_babershop.Activity;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,9 +10,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.PersistableBundle;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,7 +26,6 @@ import com.google.firebase.database.ValueEventListener;
 public class MainActivity extends AppCompatActivity {
 
     FirebaseAuth Fauth;
-    FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
 
     ImageView imageVieww;
@@ -68,11 +63,9 @@ public class MainActivity extends AppCompatActivity {
                                     startActivity(n);
                                     finish();
                             }
-
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
                                 Toast.makeText(MainActivity.this, databaseError.getMessage(), Toast.LENGTH_LONG).show();
-
                             }
                         });
                     } else {

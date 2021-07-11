@@ -1,4 +1,4 @@
-package com.example.lvtn_babershop.Service;
+package com.example.lvtn_babershop.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.lvtn_babershop.Adapter.MyViewPagerAdapter;
 import com.example.lvtn_babershop.Comon.Common;
@@ -34,7 +33,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.OnClick;
 import dmax.dialog.SpotsDialog;
 
 public class BookingActivity extends AppCompatActivity {
@@ -43,7 +41,6 @@ public class BookingActivity extends AppCompatActivity {
     LocalBroadcastManager localBroadcastManager;
     AlertDialog dialog;
     DatabaseReference baberRef;
-
 
     StepView stepView;
     NonSwipeViewPager viewPager;
@@ -67,7 +64,6 @@ public class BookingActivity extends AppCompatActivity {
     };
     @Override
     protected void onDestroy() {
-
         localBroadcastManager.unregisterReceiver(buttonNextReceiver);
         super.onDestroy();
     }
@@ -169,7 +165,6 @@ public class BookingActivity extends AppCompatActivity {
                                         Baber baber = dataSnapshot.getValue(Baber.class);
                                         baber.setPassword("");
                                         baber.setBaberId(dataSnapshot.getKey()); //getID of baber
-
                                         babers.add(baber);
                                     }
                                     //send Broadcast to BookingStep2Fragment to load Recybber
@@ -186,7 +181,6 @@ public class BookingActivity extends AppCompatActivity {
                         }
                     });
                 }
-
             }
         });
         btnPre.setOnClickListener(new View.OnClickListener() {

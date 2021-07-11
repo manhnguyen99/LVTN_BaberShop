@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/baber_bg1"
-    tools:context=".Service.CustomerSendOTP">
+    tools:context=".Activity.CustomerSendOTP">
     <LinearLayout
         android:orientation="vertical"
         android:id="@+id/linearlayout"

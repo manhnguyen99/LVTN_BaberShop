@@ -1,4 +1,4 @@
-package com.example.lvtn_babershop.Service;
+package com.example.lvtn_babershop.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,21 +26,20 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
 
-public class CustomerSendOTP extends AppCompatActivity {
+public class StaffVerifyPhone extends AppCompatActivity {
     String verificationId;
     FirebaseAuth FAuth;
     Button btnVerify, btnResendOTP;
     TextView txt;
     EditText edtEnterOTP;
     String phoneNum;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_staff_send_otp);
+        setContentView(R.layout.activity_staff_verify_phone);
 
-        phoneNum = getIntent().getStringExtra("PhoneNum").trim();
-
+        phoneNum = getIntent().getStringExtra("phonenumber").trim();
+        sendverifycaptioncode(phoneNum);
 
         edtEnterOTP = findViewById(R.id.edtPhoneOTP);
         txt=  findViewById(R.id.text);
@@ -51,7 +50,7 @@ public class CustomerSendOTP extends AppCompatActivity {
         btnResendOTP.setVisibility(View.INVISIBLE);
         txt.setVisibility(View.INVISIBLE);
 
-        sendverifycaptioncode(phoneNum);
+
 
         btnVerify.setOnClickListener(v -> {
 
@@ -81,8 +80,8 @@ public class CustomerSendOTP extends AppCompatActivity {
         btnResendOTP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btnResendOTP.setVisibility(View.INVISIBLE);
-                ResendOTP(phoneNum);
+                 btnResendOTP.setVisibility(View.INVISIBLE);
+                 ResendOTP(phoneNum);
 
                 new CountDownTimer(60000, 1000) {
                     @Override
@@ -100,9 +99,11 @@ public class CustomerSendOTP extends AppCompatActivity {
             }
         });
     }
+
     private void ResendOTP(String phone) {
         sendverifycaptioncode(phone);
     }
+
     private void sendverifycaptioncode(String number) {
         PhoneAuthProvider.verifyPhoneNumber(
                 PhoneAuthOptions
@@ -122,9 +123,10 @@ public class CustomerSendOTP extends AppCompatActivity {
                 verifycode(code);
             }
         }
+
         @Override
         public void onVerificationFailed(@NonNull @NotNull FirebaseException e) {
-            Toast.makeText(CustomerSendOTP.this, e.getMessage(),Toast.LENGTH_LONG).show();
+            Toast.makeText(StaffVerifyPhone.this, e.getMessage(),Toast.LENGTH_LONG).show();
         }
         @Override
         public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken){
@@ -132,24 +134,27 @@ public class CustomerSendOTP extends AppCompatActivity {
             verificationId = s;
         }
     };
+
     private void verifycode(String code) {
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
-        signWithPhone(credential);
+        linkCredential(credential);
     }
-    private void signWithPhone(PhoneAuthCredential credential) {
-      FAuth.signInWithCredential(credential)
-              .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                  @Override
-                  public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
-                      if(task.isSuccessful()){
-                          startActivity(new Intent(CustomerSendOTP.this, HomeActivity.class));
+
+    private void linkCredential(PhoneAuthCredential credential) {
+        FAuth.getCurrentUser().linkWithCredential(credential)
+                .addOnCompleteListener(StaffVerifyPhone.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
+                        if (task.isSuccessful()){
+                            Intent intent = new Intent(StaffVerifyPhone.this, HomeActivity.class);
+                            startActivity(intent);
                             finish();
-                      }
-                      else
-                      {
-                          ReusableCodeForAll.ShowAlert(CustomerSendOTP.this,"Error", task.getException().getMessage());
-                      }
-                  }
-              });
+                        }
+                        else
+                        {
+                            ReusableCodeForAll.ShowAlert(StaffVerifyPhone.this, "Error", task.getException().getMessage());
+                        }
+                    }
+                });
     }
 }
