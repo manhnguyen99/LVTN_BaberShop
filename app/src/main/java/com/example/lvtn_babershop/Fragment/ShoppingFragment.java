@@ -119,6 +119,8 @@ public class ShoppingFragment extends Fragment implements IShoppingDataLoadListe
         loadingShoppingItem("Wax");
         waxChipClick();
         sprayChipClick();
+        hairDryerChipClick();
+        hairCareChipClick();
 
 
         innitView();
@@ -152,6 +154,16 @@ public class ShoppingFragment extends Fragment implements IShoppingDataLoadListe
             }
         });
     }
+    void hairCareChipClick() {
+        chipHaircare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setSelectChip(chipHaircare);
+                loadingShoppingItem("Haircare");
+            }
+        });
+    }
+
 
     private void innitView() {
         recyclerItem.setHasFixedSize(true);

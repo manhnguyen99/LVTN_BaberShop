@@ -67,8 +67,6 @@ public class HomeActivity extends AppCompatActivity implements IBannerLoadListen
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         navigationView =findViewById(R.id.navigation_view);
 
-
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -114,7 +112,6 @@ public class HomeActivity extends AppCompatActivity implements IBannerLoadListen
             }
         }).show();
     }
-
     private boolean loadFragment(Fragment fragment) {
         if (fragment != null)
         {

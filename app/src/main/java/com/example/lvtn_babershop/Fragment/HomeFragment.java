@@ -21,6 +21,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.denzcoskun.imageslider.ImageSlider;
+import com.denzcoskun.imageslider.constants.ScaleTypes;
+import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.lvtn_babershop.Activity.BookingActivity;
 import com.example.lvtn_babershop.Activity.HomeActivity;
 import com.example.lvtn_babershop.Comon.Common;
@@ -46,6 +49,7 @@ import org.jetbrains.annotations.NotNull;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 
 public class HomeFragment extends Fragment {
@@ -54,6 +58,9 @@ public class HomeFragment extends Fragment {
     private DatabaseReference reference;
     private String userID;
     Button btnDelete;
+
+    ImageSlider imageSlider;
+
 
 
     CardView cardViewBookingInfo;
@@ -79,6 +86,8 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View itemView =  inflater.inflate(R.layout.fragment_home, container, false);
 
+
+
         arrProduct = new ArrayList<product>();
         arrHairStyle = new ArrayList<HairStyle>();
 
@@ -93,6 +102,10 @@ public class HomeFragment extends Fragment {
         txtSalonPhoneNumber = itemView.findViewById(R.id.txtSalonPhoneNumber);
         txtSalonOpenHours = itemView.findViewById(R.id.txtSalonOpenHours);
         txtSalonWebsite = itemView.findViewById(R.id.txtSalonWebsite);
+
+        imageSlider = itemView.findViewById(R.id.image_slider);
+
+        LoadBanner();
 
 
         recyclerViewHairStyle = itemView.findViewById(R.id.recycleViewHairStyle);
@@ -122,6 +135,30 @@ public class HomeFragment extends Fragment {
 
         return itemView;
     }
+
+    private void LoadBanner() {
+        final List<SlideModel> remoteimages = new ArrayList<>();
+        FirebaseDatabase.getInstance().getReference().child("Banner")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                        for (DataSnapshot dataSnapshot:snapshot.getChildren())
+                        {
+                            remoteimages.add(new SlideModel(dataSnapshot.child("image").getValue().toString()
+                                    ,dataSnapshot.child("info").getValue().toString(), ScaleTypes.FIT));
+                            imageSlider.setImageList(remoteimages,ScaleTypes.FIT);
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                    }
+                });
+
+    }
+
     private void checkCustomerInfo() {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("Customer");
